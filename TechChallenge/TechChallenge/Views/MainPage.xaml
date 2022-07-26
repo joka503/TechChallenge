@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:main="clr-namespace:TechChallenge.ViewModels.Main;assembly=TechChallenge"
+             x:Class="TechChallenge.Views.MainPage">
+
+    <ContentPage.BindingContext>
+        <main:MainPageViewModel></main:MainPageViewModel>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="9*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <SearchBar Grid.Row="0" Grid.Column="0" FontSize="Medium" TextColor="Black" Placeholder="Search" SearchCommand="{Binding MySearchCommand}" Text="{Binding SearchString}"></SearchBar>
+
+            <Frame Grid.Row="1" Grid.Column="0" CornerRadius="9" Margin="5" Padding="0" >
+                <ListView x:Name="ListView" ItemsSource="{Binding MyVehicles}" SelectedItem="{Binding }" SeparatorColor="DarkGray" SeparatorVisibility="Default" HasUnevenRows="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <customViewCell:VehicleSearchViewCell Brand="{Binding Brand}" Model="{Binding Model}" Reference="{Binding Reference}" Registry="{Binding Registry}"></customViewCell:VehicleSearchViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                    <!--<ListView.Footer>
+                        <Button BackgroundColor="DarkGray" IsVisible="{Binding ShowLoadMore}" CornerRadius="7" Command="{Binding LoadMoreCommand}" Text="Load More" FontSize="Medium" TextColor="White" Margin="10"></Button>
+                    </ListView.Footer>-->
+                </ListView>
+            </Frame>
+        </Grid>
+    </ContentPage.Content>
+
+</ContentPage>
