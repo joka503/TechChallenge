@@ -50,12 +50,13 @@
                             <Grid Padding="5">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="7*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <forms:CachedImage Grid.Column="0" Aspect="AspectFit" DownsampleToViewSize="true">
+                                <forms:CachedImage Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Aspect="AspectFit" DownsampleToViewSize="true">
                                     <forms:CachedImage.Source>
                                         <MultiBinding StringFormat="{}{0}.{1}">
                                             <Binding Path="Thumbnail.Path" />
@@ -63,7 +64,15 @@
                                         </MultiBinding>
                                     </forms:CachedImage.Source>
                                 </forms:CachedImage>
-                                <Label Grid.Column="1" Text="{Binding Title}" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center"/>
+                                <Label Grid.Column="1" Grid.Row="0" Text="{Binding Title}" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center"/>
+                                <Label Grid.Column="1" Grid.Row="1" FontSize="Small" TextColor="Black" VerticalTextAlignment="Center">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                            <Binding Path="IssueNumber" />
+                                            <Binding Path="Description" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
