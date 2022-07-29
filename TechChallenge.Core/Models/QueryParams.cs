@@ -25,7 +25,7 @@ namespace TechChallenge.Core.Models
         [AliasAs("offset")]
         public int Offset { get; set; }
 
-        [AliasAs("title")]
+        [AliasAs("titleStartsWith")]
         public string Title { get; set; }
     }
 }

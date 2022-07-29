@@ -198,6 +198,19 @@ namespace TechChallenge.Core.Models
 
         [JsonPropertyName("events")]
         public Events Events { get; set; }
+
+        public string SubText
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(VariantDescription))
+                {
+                    return $"Issue Number: {IssueNumber} / Variant Description: {VariantDescription}";
+                }
+
+                return $"Issue Number: {IssueNumber}";
+            }
+        }
     }
 
     public class Series

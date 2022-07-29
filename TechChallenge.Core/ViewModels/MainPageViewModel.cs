@@ -17,9 +17,13 @@ namespace TechChallenge.Core.ViewModels
 
         private readonly IMarvelService _marvelService;
 
+        private readonly IDialogService _dialogService;
+
+        private readonly INavigationService _navigationService;
+
         public IAsyncRelayCommand GetMarvelComicsCommand { get; }
         public IAsyncRelayCommand ComicSelectedCommand { get; }
-        public IAsyncRelayCommand SearchTextChangedCommand { get; }
+        public IRelayCommand SearchTextChangedCommand { get; }
 
         public ObservableCollection<Comics> ComicsList { get; set; }
 
@@ -27,14 +31,18 @@ namespace TechChallenge.Core.ViewModels
 
         public string Search { get; set; }
 
+        public Comics SelectedComic { get; set; }
+
         #endregion
 
-        public MainPageViewModel(IMarvelService marvelService)
+        public MainPageViewModel(IMarvelService marvelService, IDialogService dialogService, INavigationService navigationService)
         {
             _marvelService = marvelService;
+            _dialogService = dialogService;
+            _navigationService = navigationService;
             GetMarvelComicsCommand = new AsyncRelayCommand(DownloadMarvelComics);
             ComicSelectedCommand = new AsyncRelayCommand(ComicSelected);
-            SearchTextChangedCommand = new AsyncRelayCommand(ClearList);
+            SearchTextChangedCommand = new RelayCommand(ClearList);
             ComicsList = new ObservableCollection<Comics>();
         }
 
@@ -58,31 +66,37 @@ namespace TechChallenge.Core.ViewModels
 
                 if (result.Data.Count != 0)
                 {
-                    result.Data.Results.ForEach(t=> ComicsList.Add(t));
+                    result.Data.Results?.ForEach(t => ComicsList.Add(t));
 
-                    // Validar nº de linhas disponíveis para adicionar mais
-
-                    ShowLoadMoreButton = true;
+                    if (result.Data.Offset + result.Data.Count != result.Data.Total)
+                    {
+                        ShowLoadMoreButton = true;
+                    }
+                    else
+                    {
+                        ShowLoadMoreButton = false;
+                    }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _dialogService.ShowAlert("Whoops! Something went wrong.");
             }
         }
 
         private async Task ComicSelected()
         {
-            Console.WriteLine("TESTE");
+            _navigationService.NavigateTo("SelectedComicPageKey", SelectedComic);
+            Console.WriteLine(SelectedComic.Title);
         }
 
-        private async Task ClearList()
+        private void ClearList()
         {
             try
             {
                 if (string.IsNullOrEmpty(Search))
                 {
-                    ComicsList = new ObservableCollection<Comics>();
+                    ComicsList.Clear();
                     ShowLoadMoreButton = false;
                 }
             }

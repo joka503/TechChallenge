@@ -11,7 +11,6 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <behaviors:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
-            <behaviors:TextChangedEventArgsConverter x:Key="TextChangedEventArgsConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -33,7 +32,7 @@
                        SearchCommand="{Binding GetMarvelComicsCommand}">
             <SearchBar.Behaviors>
                 <behaviors:EventToCommandBehavior EventName="TextChanged"
-                                                  Command="{Binding ComicSelectedCommand}"/>
+                                                  Command="{Binding SearchTextChangedCommand}"/>
             </SearchBar.Behaviors>
         </SearchBar>
 
@@ -43,7 +42,8 @@
                           ItemsSource="{Binding ComicsList, Mode=OneWay}"
                           SeparatorColor="DarkGray"
                           SeparatorVisibility="Default"
-                          HasUnevenRows="True">
+                          HasUnevenRows="True"
+                          SelectedItem="{Binding SelectedComic}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:Comics">
                         <ViewCell>
@@ -65,14 +65,7 @@
                                     </forms:CachedImage.Source>
                                 </forms:CachedImage>
                                 <Label Grid.Column="1" Grid.Row="0" Text="{Binding Title}" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center"/>
-                                <Label Grid.Column="1" Grid.Row="1" FontSize="Small" TextColor="Black" VerticalTextAlignment="Center">
-                                    <Label.Text>
-                                        <MultiBinding StringFormat="{}{0} - {1}">
-                                            <Binding Path="IssueNumber" />
-                                            <Binding Path="Description" />
-                                        </MultiBinding>
-                                    </Label.Text>
-                                </Label>
+                                <Label Grid.Column="1" Grid.Row="1" FontSize="Small" TextColor="Black" VerticalTextAlignment="Center" Text="{Binding SubText}"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
