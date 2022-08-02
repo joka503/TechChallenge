@@ -6,7 +6,8 @@
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
              x:Class="TechChallenge.Views.MainPage"
-             x:DataType="viewModels:MainPageViewModel">
+             x:DataType="viewModels:MainPageViewModel"
+             Title="Main Page">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -14,73 +15,68 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid Margin="5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="8*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
+    <ContentPage.Content>
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="9*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <SearchBar Grid.Row="0"
+            <SearchBar Grid.Row="0"
                        Grid.Column="0"
                        FontSize="Medium"
                        TextColor="Black"
                        Placeholder="Search"
                        Text="{Binding Search}"
                        SearchCommand="{Binding GetMarvelComicsCommand}">
-            <SearchBar.Behaviors>
-                <behaviors:EventToCommandBehavior EventName="TextChanged"
+                <SearchBar.Behaviors>
+                    <behaviors:EventToCommandBehavior EventName="TextChanged"
                                                   Command="{Binding SearchTextChangedCommand}"/>
-            </SearchBar.Behaviors>
-        </SearchBar>
+                </SearchBar.Behaviors>
+            </SearchBar>
 
-        <Frame Grid.Row="1" Grid.Column="0" CornerRadius="9" Margin="5" Padding="0" >
-            <ListView x:Name="ListView" IsPullToRefreshEnabled="False"
+            <Frame Grid.Row="1" Grid.Column="0" CornerRadius="9" Margin="5" Padding="0" >
+                <ListView x:Name="ListView" IsPullToRefreshEnabled="False"
                           IsRefreshing="{Binding GetMarvelComicsCommand.IsRunning, Mode=OneWay}"
                           ItemsSource="{Binding ComicsList, Mode=OneWay}"
                           SeparatorColor="DarkGray"
                           SeparatorVisibility="Default"
                           HasUnevenRows="True"
                           SelectedItem="{Binding SelectedComic}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="models:Comics">
-                        <ViewCell>
-                            <Grid Padding="5">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="7*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <forms:CachedImage Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Aspect="AspectFit" DownsampleToViewSize="true">
-                                    <forms:CachedImage.Source>
-                                        <MultiBinding StringFormat="{}{0}.{1}">
-                                            <Binding Path="Thumbnail.Path" />
-                                            <Binding Path="Thumbnail.Extension" />
-                                        </MultiBinding>
-                                    </forms:CachedImage.Source>
-                                </forms:CachedImage>
-                                <Label Grid.Column="1" Grid.Row="0" Text="{Binding Title}" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center"/>
-                                <Label Grid.Column="1" Grid.Row="1" FontSize="Small" TextColor="Black" VerticalTextAlignment="Center" Text="{Binding SubText}"/>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Comic">
+                            <ViewCell>
+                                <Grid Padding="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="7*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <forms:CachedImage Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Aspect="AspectFit" DownsampleToViewSize="true" Source="{Binding ImagePath}"/>
+                                    <Label Grid.Column="1" Grid.Row="0" Text="{Binding Title}" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center"/>
+                                    <Label Grid.Column="1" Grid.Row="1" FontSize="Small" TextColor="Black" VerticalTextAlignment="Center" Text="{Binding SubText}"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
 
-                <ListView.Footer>
-                    <Button BackgroundColor="DarkGray" IsVisible="{Binding ShowLoadMoreButton}" CornerRadius="7" Command="{Binding GetMarvelComicsCommand}" Text="Load More" FontSize="Medium" TextColor="White" Margin="10"></Button>
-                </ListView.Footer>
+                    <ListView.Footer>
+                        <Button BackgroundColor="DarkGray" IsVisible="{Binding ShowLoadMoreButton}" CornerRadius="7" Command="{Binding GetMarvelComicsCommand}" Text="Load More" FontSize="Medium" TextColor="White" Margin="10"></Button>
+                    </ListView.Footer>
 
-                <ListView.Behaviors>
-                    <behaviors:EventToCommandBehavior EventName="ItemSelected"
+                    <ListView.Behaviors>
+                        <behaviors:EventToCommandBehavior EventName="ItemSelected"
                                                     Command="{Binding ComicSelectedCommand}"
                                                     EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}" />
-                </ListView.Behaviors>
-            </ListView>
-        </Frame>
-    </Grid>
+                    </ListView.Behaviors>
+                </ListView>
+            </Frame>
+        </Grid>
+    </ContentPage.Content>
 </ContentPage>

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TechChallenge.Core.Config;
 using TechChallenge.Core.Models;
 using TechChallenge.Core.Services;
@@ -10,7 +11,7 @@ using TechChallenge.Core.Utils;
 
 namespace TechChallenge.Core.ViewModels
 {
-    public class MainPageViewModel : ObservableObject
+    public class MainPageViewModel : ObservableRecipient
     {
 
         #region Variables
@@ -22,16 +23,16 @@ namespace TechChallenge.Core.ViewModels
         private readonly INavigationService _navigationService;
 
         public IAsyncRelayCommand GetMarvelComicsCommand { get; }
-        public IAsyncRelayCommand ComicSelectedCommand { get; }
+        public IRelayCommand ComicSelectedCommand { get; }
         public IRelayCommand SearchTextChangedCommand { get; }
 
-        public ObservableCollection<Comics> ComicsList { get; set; }
+        public ObservableCollection<Comic> ComicsList { get; set; }
 
         public bool ShowLoadMoreButton { get; set; }
 
         public string Search { get; set; }
 
-        public Comics SelectedComic { get; set; }
+        public Comic SelectedComic { get; set; }
 
         #endregion
 
@@ -41,9 +42,9 @@ namespace TechChallenge.Core.ViewModels
             _dialogService = dialogService;
             _navigationService = navigationService;
             GetMarvelComicsCommand = new AsyncRelayCommand(DownloadMarvelComics);
-            ComicSelectedCommand = new AsyncRelayCommand(ComicSelected);
+            ComicSelectedCommand = new RelayCommand(ComicSelected);
             SearchTextChangedCommand = new RelayCommand(ClearList);
-            ComicsList = new ObservableCollection<Comics>();
+            ComicsList = new ObservableCollection<Comic>();
         }
 
         private async Task DownloadMarvelComics()
@@ -84,25 +85,18 @@ namespace TechChallenge.Core.ViewModels
             }
         }
 
-        private async Task ComicSelected()
+        private void ComicSelected()
         {
-            _navigationService.NavigateTo("SelectedComicPageKey", SelectedComic);
-            Console.WriteLine(SelectedComic.Title);
+            _navigationService.NavigateTo(Constants.SelectedComicPageKey);
+            Messenger.Send(new SelectedComicChangedMessage(SelectedComic));
         }
 
         private void ClearList()
         {
-            try
+            if (string.IsNullOrEmpty(Search))
             {
-                if (string.IsNullOrEmpty(Search))
-                {
-                    ComicsList.Clear();
-                    ShowLoadMoreButton = false;
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
+                ComicsList.Clear();
+                ShowLoadMoreButton = false;
             }
         }
     }

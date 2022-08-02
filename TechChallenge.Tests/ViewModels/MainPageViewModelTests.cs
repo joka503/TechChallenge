@@ -4,6 +4,9 @@ using Moq;
 using TechChallenge.Core.Models;
 using TechChallenge.Core.Models.Base;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Messaging;
+using TechChallenge.Core.Config;
+using TechChallenge.Core.Utils;
 
 namespace TechChallenge.Tests.ViewModels
 {
@@ -33,19 +36,19 @@ namespace TechChallenge.Tests.ViewModels
             // When: Api returns comics results
             // Then: We should populate comics list of type ObservableCollection
 
-            _marvelServiceMock.Setup(x => x.GetMarvelComicsAsync(It.IsAny<QueryParams>())).Returns(Task.FromResult(new HttpResponse<Comics>()
+            _marvelServiceMock.Setup(x => x.GetMarvelComicsAsync(It.IsAny<QueryParams>())).Returns(Task.FromResult(new HttpResponse<Comic>()
             {
-                Data = new Pagination<Comics>
+                Data = new Pagination<Comic>
                 {
-                    Results = new List<Comics>
-                    { new Comics()
-                            { Title = "Comic 1" }, new Comics(){ Title = "Comic 2"}
+                    Results = new List<Comic>
+                    { new Comic()
+                            { Title = "Comic 1" }, new Comic(){ Title = "Comic 2"}
                     }, Count = 2
                 }
             }));
 
-            var expectecComicsList = new ObservableCollection<Comics>(new List<Comics>(){ new Comics()
-                            { Title = "Comic 1" }, new Comics(){ Title = "Comic 2"}
+            var expectecComicsList = new ObservableCollection<Comic>(new List<Comic>(){ new Comic()
+                            { Title = "Comic 1" }, new Comic(){ Title = "Comic 2"}
                     });
 
             _sut.GetMarvelComicsCommand.Execute(null);
@@ -81,9 +84,9 @@ namespace TechChallenge.Tests.ViewModels
             // When: Api returns comics results
             // Then: We should populate comics list of type ObservableCollection
 
-            _marvelServiceMock.Setup(x => x.GetMarvelComicsAsync(It.IsAny<QueryParams>())).Returns(Task.FromResult(new HttpResponse<Comics>()
+            _marvelServiceMock.Setup(x => x.GetMarvelComicsAsync(It.IsAny<QueryParams>())).Returns(Task.FromResult(new HttpResponse<Comic>()
             {
-                Data = new Pagination<Comics>
+                Data = new Pagination<Comic>
                 {
                     Offset = offset,
                     Count = count,
@@ -94,6 +97,39 @@ namespace TechChallenge.Tests.ViewModels
             _sut.GetMarvelComicsCommand.Execute(null);
 
             Assert.That(_sut.ShowLoadMoreButton, Is.EqualTo(showButton));
+        }
+
+        [Test]
+        public void Test_ComicSelectedCommand_HappyPath()
+        {
+            // Given: ComicSelectedCommand gets executed
+            // When: User selects comic
+            // Then: Should open the page of the selected comic
+
+            var selectedComic = new Comic(){Title = "Comic 1"};
+            _sut.SelectedComic = selectedComic;
+
+            _sut.ComicSelectedCommand.Execute(null);
+
+            _navigationServiceMock.Verify(x=> x.NavigateTo(Constants.SelectedComicPageKey), Times.Once());
+        }
+
+        [Test]
+        public void Test_SearchTextChangedCommand_SearchInputIsEmpty_ShouldClearList()
+        {
+            // Given: SearchTextChangedCommand gets executed
+            // When: User deletes all text from search bar
+            // Then: Should clear all items from the listview and hide load more button
+
+            _sut.Search = string.Empty;
+            _sut.ShowLoadMoreButton = true;
+            _sut.ComicsList = new ObservableCollection<Comic>(new List<Comic>()
+                { new Comic() { Title = "Comic 1" }, new Comic() { Title = "Comic 2" } });
+
+            _sut.SearchTextChangedCommand.Execute(null);
+
+            Assert.That(_sut.ComicsList.Count == 0);
+            Assert.That(_sut.ShowLoadMoreButton == false);
         }
     }
 }

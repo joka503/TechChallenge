@@ -1,13 +1,12 @@
-﻿using System;
-using CommunityToolkit.Mvvm.DependencyInjection;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
+using TechChallenge.Core.Config;
 using TechChallenge.Core.Services;
 using TechChallenge.Core.ViewModels;
 using TechChallenge.Navigation;
 using TechChallenge.Views;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace TechChallenge
 {
@@ -21,8 +20,8 @@ namespace TechChallenge
             InitializeComponent();
 
             var navigation = new NavigationService();
-            navigation.Configure("MainPageKey", typeof(MainPage));
-            navigation.Configure("SelectedComicPageKey", typeof(SelectedComicPage));
+            navigation.Configure(Constants.MainPageKey, typeof(MainPage));
+            navigation.Configure(Constants.SelectedComicPageKey, typeof(SelectedComicPage));
 
             if (!_initialized)
             {
@@ -31,11 +30,11 @@ namespace TechChallenge
                     new ServiceCollection()
                         //Services
                         .AddSingleton(RestService.For<IMarvelService>("https://gateway.marvel.com/v1/public"))
-                        //ViewModels
-                        .AddTransient<MainPageViewModel>()
-                        .AddTransient<SelectedComicViewModel>()
                         .AddSingleton<IDialogService, DialogService>()
                         .AddSingleton<INavigationService>(navigation)
+                        //ViewModels
+                        .AddTransient<MainPageViewModel>()
+                        .AddTransient<SelectedComicPageViewModel>()
                         .BuildServiceProvider());
             }
 
@@ -44,7 +43,7 @@ namespace TechChallenge
             MainPage = navigationPage;
         }
 
-        public static NavigationPage GetMainPage()
+        private static NavigationPage GetMainPage()
         {
             return new NavigationPage(new MainPage());
         }

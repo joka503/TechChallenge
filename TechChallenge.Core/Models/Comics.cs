@@ -110,7 +110,7 @@ namespace TechChallenge.Core.Models
         public double PriceValue { get; set; }
     }
 
-    public class Comics
+    public class Comic
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
@@ -209,6 +209,32 @@ namespace TechChallenge.Core.Models
                 }
 
                 return $"Issue Number: {IssueNumber}";
+            }
+        }
+
+        public string ImagePath
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Thumbnail.Path) && !string.IsNullOrEmpty(Thumbnail.Extension))
+                {
+                    return $"{Thumbnail.Path}.{Thumbnail.Extension}";
+                }
+
+                return string.Empty;
+            }
+        }
+
+        public string ComicDescription
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Description))
+                {
+                    return Description;
+                }
+
+                return "No description.";
             }
         }
     }

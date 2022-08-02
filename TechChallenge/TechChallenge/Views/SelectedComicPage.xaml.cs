@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using TechChallenge.Core.Models;
 using TechChallenge.Core.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,7 +12,7 @@ namespace TechChallenge.Views
         public SelectedComicPage()
         {
             InitializeComponent();
-            BindingContext = Ioc.Default.GetRequiredService<SelectedComicViewModel>();
+            BindingContext = Ioc.Default.GetRequiredService<SelectedComicPageViewModel>();
         }
     }
 }

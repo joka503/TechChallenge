@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TechChallenge.Core.Models;
+using TechChallenge.Core.Utils;
 
 namespace TechChallenge.Core.ViewModels
 {
-    public class SelectedComicViewModel : ObservableObject
+    public class SelectedComicPageViewModel : ObservableRecipient
     {
-        public SelectedComicViewModel()
+
+        public Comic SelectedComic { get; set; }
+
+        public SelectedComicPageViewModel()
         {
-            Console.WriteLine();
+            Messenger.Register<SelectedComicPageViewModel, SelectedComicChangedMessage>(this, (recipient, message) =>
+            {
+                SelectedComic = message.Value;
+            });
         }
     }
 }

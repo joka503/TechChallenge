@@ -1,12 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TechChallenge.Views.SelectedComicPage">
+             xmlns:viewModels="clr-namespace:TechChallenge.Core.ViewModels;assembly=TechChallenge.Core"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="TechChallenge.Views.SelectedComicPage"
+             x:DataType="viewModels:SelectedComicPageViewModel"
+             Title="{Binding SelectedComic.Title}">
+
+
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="7*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <forms:CachedImage Grid.Row="0" Aspect="AspectFit" DownsampleToViewSize="true" Source="{Binding SelectedComic.ImagePath}"/>
+            <Frame Grid.Row="1" Grid.Column="0" CornerRadius="9" Margin="5" Padding="5">
+                <StackLayout Margin="0" Padding="0" Orientation="Vertical">
+                    <Label Text="Description:" FontSize="Medium" TextColor="Black" FontAttributes="Bold" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
+                    <Label Text="{Binding SelectedComic.ComicDescription}" FontSize="Small" TextColor="Black" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
+                </StackLayout>
+            </Frame>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
