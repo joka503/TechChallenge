@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TechChallenge.Core.Services
+﻿namespace TechChallenge.Core.Services
 {
     public interface IDialogService
     {

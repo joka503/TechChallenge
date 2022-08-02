@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace TechChallenge.Core.Models
@@ -216,9 +214,9 @@ namespace TechChallenge.Core.Models
         {
             get
             {
-                if (!string.IsNullOrEmpty(Thumbnail.Path) && !string.IsNullOrEmpty(Thumbnail.Extension))
+                if (!string.IsNullOrEmpty(Thumbnail?.Path) && !string.IsNullOrEmpty(Thumbnail?.Extension))
                 {
-                    return $"{Thumbnail.Path}.{Thumbnail.Extension}";
+                    return $"{Thumbnail?.Path}.{Thumbnail?.Extension}";
                 }
 
                 return string.Empty;

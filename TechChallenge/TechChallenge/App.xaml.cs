@@ -32,6 +32,7 @@ namespace TechChallenge
                         //Services
                         .AddSingleton(RestService.For<IMarvelService>("https://gateway.marvel.com/v1/public"))
                         .AddSingleton<IDialogService, DialogService>()
+                        .AddSingleton<IPreferencesService, PreferencesService>()
                         .AddSingleton<INavigationService>(navigation)
                         //ViewModels
                         .AddTransient<MainPageViewModel>()

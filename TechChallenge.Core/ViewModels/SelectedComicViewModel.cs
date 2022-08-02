@@ -20,27 +20,51 @@ namespace TechChallenge.Core.ViewModels
         public Comic SelectedComic { get; set; }
 
         public IRelayCommand FavoritesCommand { get; }
+        public IRelayCommand OnAppearingCommand { get; }
 
         private readonly IDialogService _dialogService;
 
+        private readonly IPreferencesService _preferencesService;
+
+        public string ButtonText { get; set; }
+
         #endregion
 
-        public SelectedComicPageViewModel(IDialogService dialogService)
+        public SelectedComicPageViewModel(IDialogService dialogService, IPreferencesService preferencesService)
         {
             _dialogService = dialogService;
+            _preferencesService = preferencesService;
+
             Messenger.Register<SelectedComicPageViewModel, SelectedComicChangedMessage>(this, (recipient, message) =>
             {
                 SelectedComic = message.Value;
             });
-
+            OnAppearingCommand = new RelayCommand(OnAppearing, () => SelectedComic != null);
             FavoritesCommand = new RelayCommand(CheckFavorites);
+        }
+
+        private void OnAppearing()
+        {
+            var prefs = _preferencesService.GetPreference(Constants.FavoritesPref);
+
+            if (string.IsNullOrEmpty(prefs))
+            {
+                ButtonText = "Add to Favourites";
+            }
+            else
+            {
+                List<Comic>? list = JsonSerializer.Deserialize<List<Comic>>(prefs);
+
+                var item = list?.FirstOrDefault(t => t.Id == SelectedComic.Id);
+                ButtonText = item != null ? "Remove from Favourites" : "Add to Favourites";
+            }
         }
 
         private void CheckFavorites()
         {
             try
             {
-                var prefs = Xamarin.Essentials.Preferences.Get(Constants.FavoritesPref, string.Empty);
+                var prefs = _preferencesService.GetPreference(Constants.FavoritesPref);
 
                 if (string.IsNullOrEmpty(prefs))
                 {
@@ -48,9 +72,10 @@ namespace TechChallenge.Core.ViewModels
                     comicsList.Add(SelectedComic);
 
                     string values = JsonSerializer.Serialize(comicsList);
-                    Xamarin.Essentials.Preferences.Set(Constants.FavoritesPref, values);
+                    _preferencesService.SetPreference(Constants.FavoritesPref, values);
 
                     _dialogService.ShowAlert("Comic added to favorites!");
+                    ButtonText = "Remove from Favourites";
                 }
                 else
                 {
@@ -62,22 +87,23 @@ namespace TechChallenge.Core.ViewModels
                         {
                             list.Remove(item);
                             _dialogService.ShowAlert("Comic removed from favorites!");
+                            ButtonText = "Add to Favourites";
                         }
                         else
                         {
                             list.Add(SelectedComic);
                             _dialogService.ShowAlert("Comic added to favorites!");
+                            ButtonText = "Remove from Favourites";
                         }
 
                         if (list.Count == 0)
                         {
-                            Xamarin.Essentials.Preferences.Set(Constants.FavoritesPref, string.Empty);
-
+                            _preferencesService.SetPreference(Constants.FavoritesPref, string.Empty);
                         }
                         else
                         {
                             string values = JsonSerializer.Serialize(list);
-                            Xamarin.Essentials.Preferences.Set(Constants.FavoritesPref, values);
+                            _preferencesService.SetPreference(Constants.FavoritesPref, values);
                         }
                     }
                 }

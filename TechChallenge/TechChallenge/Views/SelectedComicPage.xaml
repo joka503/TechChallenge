@@ -21,7 +21,7 @@
                 <StackLayout Margin="0" Padding="0" Orientation="Vertical">
                     <Label Text="Description:" FontSize="Medium" TextColor="Black" FontAttributes="Bold" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
                     <Label Text="{Binding SelectedComic.ComicDescription}" FontSize="Small" TextColor="Black" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
-                    <Button Text="CLICK ME!" Command="{Binding FavoritesCommand}" HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand"></Button>
+                    <Button Text="{Binding ButtonText}" Command="{Binding FavoritesCommand}" HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand"></Button>
                 </StackLayout>
             </Frame>
         </Grid>

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Refit;
+﻿using Refit;
 
 namespace TechChallenge.Core.Models
 {
-    public  class QueryParams
+    public class QueryParams
     {
-        //[AliasAs("orderBy")]
-        //public string OrderBy { get; set; }
-
         [AliasAs("apikey")]
         public string ApiKey { get; set; }
 

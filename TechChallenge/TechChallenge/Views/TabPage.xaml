@@ -7,7 +7,8 @@
              UnselectedTabColor="DarkGray"
              SelectedTabColor="DeepSkyBlue"
              BarBackgroundColor="White"
-             x:Class="TechChallenge.Views.TabPage">
+             x:Class="TechChallenge.Views.TabPage"
+             Title="Marvel Comics">
 
     <views:MainPage></views:MainPage>
     <views:FavouritesPage></views:FavouritesPage>

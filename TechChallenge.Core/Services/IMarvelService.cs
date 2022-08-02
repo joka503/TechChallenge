@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Refit;
 using TechChallenge.Core.Models;
 using TechChallenge.Core.Models.Base;
@@ -12,8 +9,5 @@ namespace TechChallenge.Core.Services
     {
         [Get("/comics")]
         Task<HttpResponse<Comic>> GetMarvelComicsAsync(QueryParams param);
-
-        [Get("/comics/")]
-        Task<HttpResponse<Comic>> GetSingleComicAsync(QueryParams param);
     }
 }
