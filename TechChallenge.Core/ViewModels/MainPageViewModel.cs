@@ -57,7 +57,6 @@ namespace TechChallenge.Core.ViewModels
                 var result = await _marvelService.GetMarvelComicsAsync(new QueryParams()
                 {
                     ApiKey = Constants.PublicKey,
-                    //OrderBy = "focDate",
                     TimeStamp = date,
                     Hash = hash,
                     Limit = 20,

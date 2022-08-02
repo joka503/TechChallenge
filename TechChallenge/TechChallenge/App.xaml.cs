@@ -22,6 +22,7 @@ namespace TechChallenge
             var navigation = new NavigationService();
             navigation.Configure(Constants.MainPageKey, typeof(MainPage));
             navigation.Configure(Constants.SelectedComicPageKey, typeof(SelectedComicPage));
+            navigation.Configure(Constants.FavouritesPageKey, typeof(FavouritesPage));
 
             if (!_initialized)
             {
@@ -35,6 +36,7 @@ namespace TechChallenge
                         //ViewModels
                         .AddTransient<MainPageViewModel>()
                         .AddTransient<SelectedComicPageViewModel>()
+                        .AddTransient<FavouritesViewModel>()
                         .BuildServiceProvider());
             }
 
@@ -45,7 +47,7 @@ namespace TechChallenge
 
         private static NavigationPage GetMainPage()
         {
-            return new NavigationPage(new MainPage());
+            return new NavigationPage(new TabPage());
         }
 
         protected override void OnStart()

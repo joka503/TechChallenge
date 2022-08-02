@@ -11,5 +11,8 @@ namespace TechChallenge.Core.Config
 
         public const string MainPageKey = "MainPageKey";
         public const string SelectedComicPageKey = "SelectedComicPageKey";
+        public const string FavouritesPageKey = "FavouritesPageKey";
+
+        public const string FavoritesPref = "FavoritesPref";
     }
 }

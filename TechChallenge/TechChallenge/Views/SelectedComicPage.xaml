@@ -7,7 +7,6 @@
              x:DataType="viewModels:SelectedComicPageViewModel"
              Title="{Binding SelectedComic.Title}">
 
-
     <ContentPage.Content>
         <Grid Margin="5">
             <Grid.RowDefinitions>
@@ -22,6 +21,7 @@
                 <StackLayout Margin="0" Padding="0" Orientation="Vertical">
                     <Label Text="Description:" FontSize="Medium" TextColor="Black" FontAttributes="Bold" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
                     <Label Text="{Binding SelectedComic.ComicDescription}" FontSize="Small" TextColor="Black" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
+                    <Button Text="CLICK ME!" Command="{Binding FavoritesCommand}" HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand"></Button>
                 </StackLayout>
             </Frame>
         </Grid>
